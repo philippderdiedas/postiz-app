@@ -50,7 +50,12 @@ export class CopilotController {
       endpoint: '/copilot/chat',
       runtime: new CopilotRuntime(),
       serviceAdapter: new OpenAIAdapter({
-        model: 'gpt-4.1',
+        model:
+          // @ts-ignore
+          req?.body?.variables?.data?.metadata?.requestType ===
+          'TextareaCompletion'
+            ? (process.env.OPENAI_TEXT_MODEL_MINI || 'gpt-4o-mini')
+            : (process.env.OPENAI_TEXT_MODEL || 'gpt-4.1'),
       }),
     });
 
